@@ -29,6 +29,10 @@
 // Import reusable UI components: Button and Badge
 
 /* --- YOUR IMPORTS GO HERE --- */
+import {motion, useScroll, useTransform} from "framer-motion"; //named import
+import heroBeans from "../assets/hero-beans.png"; //default import
+import Button from "./ui/Button";
+import Badge from "./ui/Badge";
 
 
 // STEP 2: Animation Variants (outside the component)
@@ -83,3 +87,87 @@
 //   - Floating price badge (circular badge showing "FROM $14.99 per bag")
 
 /* --- YOUR COMPONENT CODE GOES HERE --- */
+const textVariants = {
+    hidden: {}, //starting state
+    visible: {transition: {staggerChildren: 0.12}}
+
+};
+
+//animation states for each individual word 
+const wordVariant = {
+    hidden: {opacity: 0, y: 60, rotateX: -40}, //starting state 
+    visible: {
+        opacity: 1,
+        y:0,
+        rotateX: 0, 
+        transition: {duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94]}
+    }
+};
+
+
+//main component --> export default 
+export default function HeroSection(){ 
+
+    const {scrollY} = useScroll();
+
+    //scroll-linked values for the hero image: 
+    //scroll it shrinks, fades out, and drifts down
+    const imageScale = useTransform (scrollY, [0,600], [1.35, 0.9]);
+    const imgOpacity = useTransform(scrollY, [0,500], [1, 0]); 
+    const imgY = useTransform(scrollY, [0, 600], [0,100]);
+
+
+
+
+    return (
+        // this is a fragment - groups elemtns wihtout an extra wrapper tag
+        <>
+        {/* text content */}
+        < id="home" className="hero-text-column"> 
+        {/* Badge: intial = where it starts, animates = where it ends up */}
+        <motion.div
+        initial={{opacity: 0,y: 20}}
+        animate={{opacity: 1, y: 0}}
+        transition={{ duration: 0.5, delay: 0.1}}
+        >
+        <Badge variant = "outline" className= "mb-5">
+            ✦ Premium Coffee Beans — Roasted Fresh Daily
+        </Badge>
+        </motion.div>
+
+        {/* headline. variants + intial/animate tie ro the states above perspective gives the words rotateX and realistic depth */}
+
+        <m
+        className="h1-stack" 
+        style= {{ margin: 0, perspective: "600px" }}
+        variants = {textVariants}
+        initial = "hidden"
+        animate = "visible"
+        > 
+        
+        {/* One animated word each - inline-block is required  */}
+        <motion.span variants = {wordVariant} style = {{ display: "inline-block"}}>
+        YOUR PLACE
+        </motion.span> 
+        <br/>
+        <motion.span
+        variants = {wordVariant}
+        className = "muted"
+        style = {{ display: "inline-block"}}
+        >
+        FOR COFFEE
+        </motion.span>
+        <br />
+        <motion.span
+        variants = {wordVariant}
+        style = {{ display: "inline-block"}}
+        >
+        Brewing
+        </motion.span>
+        </motion.h1>
+        </div>
+
+        </>
+
+    );
+};
