@@ -112,7 +112,7 @@ export default function HeroSection(){
 
     //scroll-linked values for the hero image: 
     //scroll it shrinks, fades out, and drifts down
-    const imageScale = useTransform (scrollY, [0,600], [1.35, 0.9]);
+    const imgScale = useTransform (scrollY, [0,600], [1.35, 0.9]);
     const imgOpacity = useTransform(scrollY, [0,500], [1, 0]); 
     const imgY = useTransform(scrollY, [0, 600], [0,100]);
 
@@ -123,7 +123,7 @@ export default function HeroSection(){
         // this is a fragment - groups elemtns wihtout an extra wrapper tag
         <>
         {/* text content */}
-        < id="home" className="hero-text-column"> 
+        <div id="home" className="hero-text-column"> 
         {/* Badge: intial = where it starts, animates = where it ends up */}
         <motion.div
         initial={{opacity: 0,y: 20}}
@@ -137,7 +137,7 @@ export default function HeroSection(){
 
         {/* headline. variants + intial/animate tie ro the states above perspective gives the words rotateX and realistic depth */}
 
-        <m
+        <motion.h1
         className="h1-stack" 
         style= {{ margin: 0, perspective: "600px" }}
         variants = {textVariants}
@@ -165,9 +165,86 @@ export default function HeroSection(){
         Brewing
         </motion.span>
         </motion.h1>
+
+
+        {/* Paragraph - delayed so it lands after the headline  */}
+
+        <motion.p
+        className= "lead"
+        style ={{marginTop: 18}}
+        initial = {{ opacity: 0, y: 0}}
+        animate = {{ opacity: 1, y: 0}}
+        transition = {{duration: 0.6, delay: 0.6}}
+        >
+
+        Farm-to-cup single-orgin beans from Ethiopia, Colombia & beyond. Freshly roasted in small batches and shipped to your door within 48 hours.
+        </motion.p>
+
+        <motion.div 
+        className="hero-actions"
+        initial = {{opacity:0, y: 20}}
+        animate={{opacity: 1, y: 0}}
+        transition={{ duration: 0.5, delay: 0.8}} 
+        >
+        <Button 
+        variant = "accent"
+        size = "lg"
+        className = "shadow-lg"
+        onClick = {() => document.getElementById("shop")?.scrollIntoView({behavior: "smooth"
+        })}
+        >
+        SHOP COFFEE ☕
+        </Button>
+        
+        </motion.div>
+
+        {/* trust indicators - appear last, after the buttons */}
+        <motion.div
+        className = "hero-trust"
+        initial = {{ opacity: 0}}
+        animate = {{opacity: 1 }}
+        transition = {{ duration: 0.6, delay: 1.1}}
+        >
+            <span>★★★★★ 4.9/5 from 2,400+ customers</span>
+            <span className = "hero-trust-divider"></span>
+            <span>Free Shipping over $50</span>
+        </motion.div>
         </div>
 
-        </>
 
+        {/* right - beans image + floating price tag */}
+        <div  className = "hero-art-container">
+        <motion.img
+        className = "hero-art"
+        src={heroBeans}
+        alt="premium coffee Beans"
+        style = {{
+            scale: imgScale,
+            opacity: imgOpacity,
+            y: imgY
+        }}
+        initial = {{ opacity: 0, scale: 0.8 }}
+        animate = {{ opacity: 1, scale: 1.35, x: 0}}
+        transition = {{ duration: 1.2, ease: [0.25, 0.45, 0.94]}}
+        />
+
+        {/* price badge - springs in bouncily once the image has arrived */}
+        <motion.div
+        className = "hero-floating-badge"
+        initial = {{opacity: 0, scale: 0.5}}
+        animate = {{opacity: 1, scale: 1}}
+        transition = {{
+            duration: 0.5,
+            delay: 1.3,
+            type: "spring",
+            stiffness: 200
+        }}
+        > 
+        <span className = "hero-floating-badge-label">FROM</span>
+        <span className = "hero-floating-badge-price">$14.99</span>
+        <span className = "hero-floating-badge-label">Per Bag</span>
+        </motion.div>
+        </div>
+        </>
     );
 };
