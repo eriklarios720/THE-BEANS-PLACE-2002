@@ -31,6 +31,7 @@
 /* --- YOUR IMPORTS GO HERE --- */
 import HeroSection from "./components/HeroSection";
 import FooterSection from "./components/FooterSection";
+import NavBar from "./components/NavBar";
 
 
 // STEP 2: Create and export the App component
@@ -61,6 +62,7 @@ export default function App() {
     return (
         <div className =  "app">
         {/* NavBar */}
+        <NavBar/>
 
 
         {/* Hero */}
