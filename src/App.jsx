@@ -32,6 +32,8 @@
 import HeroSection from "./components/HeroSection";
 import FooterSection from "./components/FooterSection";
 import NavBar from "./components/NavBar";
+import RibbonTicker from "./components/RibbonTicker";
+import FeaturesSection from "./components/FeaturesSection";
 
 
 // STEP 2: Create and export the App component
@@ -72,9 +74,14 @@ export default function App() {
             </div>
         </section>
 
+
+        {/* Ribbon Ticker */}
+        <RibbonTicker />
+
+
         {/* Features / Carousel */}
         <section className="features bg-features" id="shop">
-
+            <FeaturesSection />
         </section>
 
         {/* Product showcase */}
@@ -82,6 +89,7 @@ export default function App() {
 
         </section>
 
+        <RibbonTicker />
 
         {/* CTA */}
         <section className="bg-cta">

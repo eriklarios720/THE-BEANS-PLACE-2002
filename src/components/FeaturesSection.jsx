@@ -32,6 +32,25 @@
 //   imgColombianSupremo, imgEthiopianHarrar, imgArabianMocha
 
 /* --- YOUR IMPORTS GO HERE --- */
+import {useEffect, useRef, useState} from "react";
+
+import imgRedSulawesi from "../assets/Red-Sulawesi-Bag.png";
+import imgUrigacheffe from "../assets/Urigacheffe-Bag.png";
+import imgTanzaniaPeaberry from "../assets/Tanzania-Peaberry-Bag.png";
+import imgPanamaGeisha from "../assets/Panama-Geisha.png";
+import imgVietnameserobusta from "../assets/Vietnamese-Robusta.png";
+import imgBrazilianSantos from "../assets/Brazilian-Santos-Bag.png";
+import imgCostaRicaTarrazu from "../assets/Costa-Rica-Tarrazu-Bag.png";
+import imgGuatemalaAntigua from "../assets/Guatemala-Antigua-Bag.png";
+import imgKenyaAA from "../assets/Kenya-AA-Bag.png";
+import imgSumatraMandheling from "../assets/Sumatra-Mandheling-Bag.png";
+import imgKona from "../assets/Kona-Bag.png";
+import imgJamaicanBlueMountain from "../assets/Jamaican-Blue-Mountain-Bag.png";
+import imgColombianSupremo from "../assets/Colombian-Supremo-Bag.png";
+import imgEthiopianHarrar from "../assets/Ethiopian-Harrar-Bag.png";
+import imgArabianMocha from "../assets/Arabian-Mocha-Bag.png";
+ 
+
 
 
 // STEP 2: Define three row arrays (outside the component)
@@ -43,6 +62,59 @@
 // const row3 = [imgGuatemalaAntigua, imgJamaicanBlueMountain, ...];
 
 /* --- YOUR ROW ARRAYS GO HERE --- */
+const row1 = [
+    imgJamaicanBlueMountain,
+    imgEthiopianHarrar,
+    imgGuatemalaAntigua,
+    imgTanzaniaPeaberry,
+    imgColombianSupremo,
+    imgVietnameserobusta,
+    imgKona,
+    imgArabianMocha,
+    imgKenyaAA,
+    imgUrigacheffe,
+    imgSumatraMandheling,
+    imgPanamaGeisha,
+    imgRedSulawesi,
+    imgCostaRicaTarrazu,
+    imgBrazilianSantos
+];
+ 
+const row2 = [
+    imgKenyaAA,
+    imgSumatraMandheling,
+    imgVietnameserobusta,
+    imgArabianMocha,
+    imgPanamaGeisha,
+    imgGuatemalaAntigua,
+    imgJamaicanBlueMountain,
+    imgColombianSupremo,
+    imgUrigacheffe,
+    imgTanzaniaPeaberry,
+    imgEthiopianHarrar,
+    imgKona,
+    imgRedSulawesi,
+    imgBrazilianSantos,
+    imgCostaRicaTarrazu
+];
+ 
+const row3 = [
+    imgGuatemalaAntigua,
+    imgJamaicanBlueMountain,
+    imgEthiopianHarrar,
+    imgKona,
+    imgUrigacheffe,
+    imgTanzaniaPeaberry,
+    imgKenyaAA,
+    imgColombianSupremo,
+    imgVietnameserobusta,
+    imgSumatraMandheling,
+    imgPanamaGeisha,
+    imgArabianMocha,
+    imgRedSulawesi,
+    imgCostaRicaTarrazu,
+    imgBrazilianSantos
+];
 
 
 // STEP 3: ImageRow helper component
@@ -90,3 +162,81 @@
 //      </section>
 
 /* --- YOUR COMPONENT CODE GOES HERE --- */
+
+//draw one horizontal row,  local to this file since nothing else uses it
+// images -> which array of photos to show 
+// offset -> how far to slide the row sideways wide enought to show no gaps
+function ImageRow({ images, offset = 0 }) {
+    //double the list so the row is always wide enpugh to show no gaps
+    const doubled = [...images,...images];
+
+    return (
+        <div className="carousel-row" style={{transform: `translate3d(${offset}px, 0, 0)`}}>
+            {doubled.map((src, i) => (
+                <div className="carousel-card" key={'${index}'}>
+                    <img 
+                    src={src}
+                    alt = {`Coffee bag ${(i % images.length) + 1}`}
+                 className="carousel-image" 
+                 loading="lazy"
+                  />
+                </div>
+            ))}
+        </div>
+    )
+}
+
+
+export default function FeaturesSection() {
+
+    //point at the <section> below once its on the page
+    const sectionRef = useRef(null);
+    //how far each row is slid sideways, in pixels - one number per row
+    const [offsets, setOffsets] =useState ([0, 0, 0]);
+
+
+    useEffect(() => {
+        const handleScroll = () => {
+            //bail out if the section isnt on the page yet
+            if(!sectionRef.current) return;
+
+            //element position relative to the visibile window
+            const rect = sectionRef.current.getBoundingClientRect();
+            const viewH = window.innerHeight;
+
+            // 0 when this section enter the bottom, 1 when it leaves the top...
+            const progress = 1 - rect.bottom / (viewH + rect.height);
+            //..clamped so it can never go below 0 or above 1
+            const p = Math.max(0, Math.min(1,progress));
+
+            //slide distance scales with the viewport, capped at 600 px
+            const range = Math.min(window.innerWidth * 0.5, 600); 
+
+            // p ("how far scrolled" x range = "how far to slide")
+            setOffsets([
+                -p *  range,
+                p * range -range,
+                -p * range * 0.7
+            ])
+
+        }
+
+        //run once so the row sits correctly before any scrolling
+        handleScroll();
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+
+        return () => window.removeEventListener("scroll", handleScroll);
+
+    }, []);
+
+    return (
+        <section className="carousel-gallery-section" ref={sectionRef}>
+            <div className = "carousel-gallery-container">
+            <ImageRow images = {row1} offset={offsets[0]}/>
+            <ImageRow images = {row2} offset={offsets[1]}/>
+            <ImageRow images = {row3} offset={offsets[2]}/>
+            </div>
+        </section>
+    );
+};
