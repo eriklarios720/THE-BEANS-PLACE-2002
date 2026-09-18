@@ -35,7 +35,13 @@
 //   Separator, Input (+ Textarea), Button
 
 /* --- YOUR IMPORTS GO HERE --- */
-
+import { useState, useEffect, useRef} from "react";
+import { motion, useMotionValue, useSpring, useTransform} from "framer-motion";
+import ScrollReveal from "./ui/ScrollReveal";
+import { StaggerContainer, StaggerItem } from "./ui/ScrollReveal";
+import Separator from "./ui/Separator";
+import Input, { Textarea } from "./ui/Input";
+import Button from "./ui/Button";
 
 // STEP 2: Contact channels data (outside the component)
 // Define an array of contact info objects:
